@@ -539,10 +539,8 @@ lsof -ti:3001 | xargs kill -9
 | **Icons** | Inline SVG |
 
 ---
-
-## License
-
-Copyright © 2024 Deepanshu. All rights reserved.
+##Author
+MR. Deepanshu 
 
 ---
 
