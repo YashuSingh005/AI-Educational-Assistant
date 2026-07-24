@@ -1,4 +1,6 @@
-export const OPENROUTER_API_URL = '/api/chat';
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
+
+export const OPENROUTER_API_URL = `${API_BASE_URL}/chat`;
 
 export const INITIAL_MODEL = 'meta-llama/llama-3.3-70b-instruct';
 
@@ -49,7 +51,7 @@ D) [Option D]
 **Answer:** [A/B/C/D]
 **Explanation:** [Why this is correct and others are not]
 
-Wait for user to answer before providing the next question. Track score if user wants.`
+Wait for user to answer before providing the next question. Track score if user wants.`,
 };
 
 export const DEFAULT_SYSTEM_PROMPT = 'You are a helpful, concise, and knowledgeable AI assistant. Provide clear, accurate, and well-structured responses.';

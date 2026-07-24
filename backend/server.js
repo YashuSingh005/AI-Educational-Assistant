@@ -1,19 +1,8 @@
 import express from 'express';
 import cors from 'cors';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import 'dotenv/config';
 
 const app = express();
-const PORT = process.env.PORT || 3001;
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const distPath = path.join(__dirname, '../dist');
-
-app.use(cors());
-app.use(express.json());
-app.use(express.static(distPath));
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
@@ -22,10 +11,15 @@ const SITE_URL = process.env.SITE_URL || 'http://localhost:5173';
 const SITE_NAME = process.env.SITE_NAME || 'AI Chatbot';
 
 if (!OPENROUTER_API_KEY) {
-  console.error('ERROR: OPENROUTER_API_KEY is not set in .env file');
-  console.error('Copy .env.example to .env and add your API key');
-  process.exit(1);
+  console.error('ERROR: OPENROUTER_API_KEY is not set in environment variables');
+  console.error('Set OPENROUTER_API_KEY in Vercel environment variables');
 }
+
+app.use(cors({
+  origin: SITE_URL,
+  credentials: true,
+}));
+app.use(express.json());
 
 app.post('/api/chat', async (req, res) => {
   const { messages, model, stream = true } = req.body;
@@ -115,11 +109,12 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', model: DEFAULT_MODEL });
 });
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(distPath, 'index.html'));
-});
+export default app;
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-  console.log(`Using model: ${DEFAULT_MODEL}`);
-});
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 3001;
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Using model: ${DEFAULT_MODEL}`);
+  });
+}

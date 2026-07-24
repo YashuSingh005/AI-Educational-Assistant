@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "buildCommand": "echo 'No build step required'",
+  "devCommand": "node server.js",
+  "framework": "node",
+  "functions": {
+    "server.js": {
+      "runtime": "nodejs20.x",
+      "maxDuration": 30
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/server.js"
+    },
+    {
+      "src": "/health",
+      "dest": "/server.js"
+    }
+  ],
+  "env": {
+    "OPENROUTER_API_KEY": "@openrouter_api_key",
+    "OPENROUTER_MODEL": "@openrouter_model",
+    "SITE_URL": "@site_url",
+    "SITE_NAME": "@site_name"
+  }
+}
